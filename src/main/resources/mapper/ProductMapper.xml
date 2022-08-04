@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.persistance.mapper.IProductMapper">
+
+    <!---상품 리스트 조회-->
+    <select parameterType="ProductDTO" id="getProductList" resultType="ProductDTO">
+        SELECT PRO_TITLE, PRO_CONTENT, PRO_PRICE, PRO_REG_ID, FILE_SEQ, PRO_SEQ, PRO_TYPE,PRO_VALUE
+        FROM PRODUCT
+    </select>
+    <!---상품 리스트 조회-->
+    <select parameterType="ProductDTO" id="getProductListByReg_id" resultType="ProductDTO">
+        SELECT PRO_TITLE, PRO_CONTENT, PRO_PRICE, PRO_REG_ID, FILE_SEQ, PRO_SEQ, PRO_TYPE,PRO_VALUE
+        FROM PRODUCT WHERE PRO_REG_ID=#{pro_reg_id}
+    </select>
+    <!-- 상품 리스트 등록-->
+    <insert id="InsertProductInfo" parameterType="ProductDTO" >
+        INSERT INTO PRODUCT
+            (PRO_NAME,PRO_TITLE,PRO_CONTENT,PRO_PRICE,PRO_VALUE)
+        VALUES
+            (#{pro_name},#{pro_title},#{pro_content},#{pro_price},#{pro_value})
+
+    </insert>
+
+    <!-- 상품 리스트 삭제 쿼리 -->
+    <delete id="deleteProductInfo" parameterType="ProductDTO">
+        DELETE FROM PRODUCT
+        WHERE PRO_SEQ = #{pro_seq}
+    </delete>
+
+    <insert id="InsertProductFileInfo" parameterType="ProductDTO">
+        INSERT INTO PRODUCT
+            (PRO_REG_ID, PRO_TITLE,PRO_CONTENT,PRO_PRICE,PRO_TYPE,FILE_SEQ,PRO_VALUE)
+        VALUES
+            (#{pro_reg_id},#{pro_title},#{pro_content},#{pro_price},#{pro_type},#{file_seq},#{pro_value})
+
+    </insert>
+
+    <select id="seqSearch" parameterType="ProductDTO" resultType="ProductDTO">
+        SELECT *
+        FROM PRODUCT
+        WHERE FILE_SEQ = #{file_seq}
+    </select>
+
+    <update id="updatePro" parameterType="ProductDTO">
+        UPDATE PRODUCT SET PRO_TITLE = #{pro_title}, PRO_CONTENT = #{pro_content}, PRO_PRICE = #{pro_price}
+        WHERE PRO_REG_ID = #{pro_reg_id}
+    </update>
+
+</mapper>
+

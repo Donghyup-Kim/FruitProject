@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.persistance.mapper.ISellerMapper">
+
+    <!-- 회원가입 로직 -->
+    <insert id="insertSeller" parameterType="SellerInfoDTO">
+        INSERT INTO SELLINFO (
+           SELL_ID,
+           SELL_PW,
+           SELL_NAME,
+           SELL_NICK,
+           SELL_EMAIL,
+           SELL_ADDRESS
+        ) VALUES (
+                     #{sell_id},
+                     #{sell_pw},
+                     #{sell_name},
+                     #{sell_nick},
+                     #{sell_email},
+                     #{sell_address}
+                 )
+    </insert>
+    <!-- 회원 가입 중복 방지하기 -->
+    <select id="getSellExists" parameterType="SellerInfoDTO" resultType="SellerInfoDTO">
+        SELECT IF(COUNT(1) = 0, 'N', 'Y') AS EXISTS_YN
+        FROM SELLINFO
+        WHERE SELL_ID = #{sell_id}
+    </select>
+
+    <!---회원가입 로그인하기 -->
+    <select id="getSellerLogin" parameterType="SellerInfoDTO" resultType="SellerInfoDTO">
+        SELECT SELL_ID,SELL_PW FROM SELLINFO
+        WHERE SELL_ID = #{sell_id} AND SELL_PW = #{sell_pw}
+    </select>
+
+
+</mapper>
+

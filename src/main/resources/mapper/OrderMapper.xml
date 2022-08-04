@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.persistance.mapper.IOrderMapper">
+
+    <select id="getproductuser" parameterType="OrderDTO" resultType="OrderDTO">
+        SELECT (
+            CASE WHEN COUNT(1) THEN 'Y' ELSE 'N' END
+                   ) AS EXISTS_YN
+        FROM `ORDER`
+        WHERE ORD_ID = #{ord_id}
+    </select>
+
+
+    
+    <insert id="InsertOrder" parameterType="OrderDTO">
+        INSERT INTO `ORDER`(
+             ORD_ID,
+             PRODUCT_SEQ
+            ) VALUES (
+             #{ord_id},
+             #{product_seq}
+           )
+    </insert>
+
+
+    <select id="getproductinfo" parameterType="OrderDTO" resultType="OrderDTO">
+        SELECT PRO_SEQ, PRO_TYPE, PRO_PRICE, PRO_TITLE, PRO_REG_ID
+        FROM PRODUCT
+        WHERE PRO_SEQ = #{product_seq}
+    </select>
+
+    <select id="select" parameterType="OrderDTO" resultType="OrderDTO">
+        SELECT ORD_SEQ, ORD_ID, PRODUCT_SEQ FROM `ORDER` WHERE ORD_ID = #{ord_id}
+    </select>
+    
+    <update id="updateOrder" parameterType="OrderDTO">
+        UPDATE `ORDER` SET PRODUCT_SEQ = #{pro_seq}
+        WHERE ORD_SEQ = #{ord_seq}
+    </update>
+
+    <select id="selectpro_seq" parameterType="OrderDTO" resultType="OrderDTO">
+        SELECT PRODUCT_SEQ FROM `ORDER` WHERE ORD_ID = #{ord_id}
+    </select>
+
+    <delete id="deleteorder" parameterType="ProductDTO">
+        DELETE FROM `ORDER`
+        WHERE PRODUCT_SEQ = #{pro_seq}
+    </delete>
+
+
+</mapper>
+

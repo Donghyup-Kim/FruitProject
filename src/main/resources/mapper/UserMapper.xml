@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.persistance.mapper.IUserMapper">
+
+    <!-- 아이디로 회원 가입 중복 방지하기 -->
+    <select id="getUserExists" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT IF(COUNT(1) = 0, 'N', 'Y') AS EXISTS_YN
+        FROM USERINFO
+        WHERE USER_ID = #{user_id}
+    </select>
+
+    <!---회원가입 로그인하기 -->
+    <select id="getUserLoginCheck" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT USER_ID,USER_PW FROM USERINFO
+        WHERE USER_ID = #{user_id} AND USER_PW = #{user_pw}
+    </select>
+
+    <!-- 회원가입 로직 -->
+    <insert id="insertUser" parameterType="UserInfoDTO">
+        INSERT INTO USERINFO (
+                              USER_ID,
+                              USER_PW,
+                              USER_NAME,
+                              USER_NICK,
+                              USER_EMAIL,
+                              USER_ADDRESS
+        ) VALUES (
+                  #{user_id},
+                  #{user_pw},
+                  #{user_name},
+                  #{user_nick},
+                  #{user_email},
+                  #{user_address}
+                         )
+    </insert>
+
+    <update id="updatepw" parameterType="UserInfoDTO">
+        UPDATE USERINFO
+        SET   USER_PW = #{user_pw}
+        WHERE USER_ID = #{user_id} and USER_EMAIL = #{user_email}
+    </update>
+
+    <select id="selectUserInfo" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT USER_ID,
+               USER_PW,
+               USER_NAME,
+               USER_NICK,
+               USER_EMAIL,
+               USER_ADDRESS
+        FROM USERINFO WHERE USER_ID = #{ord_id}
+    </select>
+
+
+
+    
+</mapper>
+

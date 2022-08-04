@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.persistance.mapper.IFileMapper">
+    <insert id="fileInfo" parameterType="FileInfoDTO" useGeneratedKeys="true" keyProperty="file_seq">
+        INSERT INTO FILE_INFO
+            (FILE_CODE)
+        VALUE(#{file_code})
+    </insert>
+
+    <insert id="filedetailInfo" parameterType="FileInfoDTO">
+        INSERT INTO FILEINFO_DETAIL
+        (FILE_SEQ,
+         FILE_DETAIL_SEQ,
+         FILE_DETAIL_NAME,
+         FILE_DETAIL_PATH,
+         FILE_DETAIL_ORG_NAME,
+         FILE_DETAIL_EXT
+         )
+        VALUES (#{file_seq},
+                (SELECT IFNULL(MAX(FILE_DETAIL_SEQ),0)+1 FROM FILEINFO_DETAIL ALIAS_FOR_FILEDETAIL WHERE FILE_SEQ=#{file_seq}),
+                #{file_detail_name},
+                #{file_detail_path},
+                #{file_detail_org_name},
+                #{file_detail_ext}
+                )
+    </insert>
+
+    <select id="FileSeqSearch" parameterType="FileInfoDTO" resultType="FileInfoDTO">
+        SELECT FILE_SEQ
+        FROM FILE_INFO
+        WHERE FILE_CODE = #{file_code}
+    </select>
+
+    <select id="selectfilepath" parameterType="FileInfoDTO" resultType="FileInfoDTO">
+        SELECT FILE_DETAIL_PATH
+        FROM FILEINFO_DETAIL
+    </select>
+    <select id="getimg" parameterType="FileInfoDTO" resultType="FileInfoDTO">
+        SELECT FILE_DETAIL_PATH
+        FROM FILEINFO_DETAIL WHERE FILE_SEQ = #{file_seq}
+    </select>
+
+</mapper>
+
